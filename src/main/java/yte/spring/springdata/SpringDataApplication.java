@@ -7,8 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import yte.spring.springdata.entity.Book;
+import yte.spring.springdata.entity.QBook;
 import yte.spring.springdata.repository.BookRepository;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 import static yte.spring.springdata.entity.specification.BookSpecification.*;
 
 @SpringBootApplication
+@Transactional
 public class SpringDataApplication {
 
 	public static void main(String[] args) {
@@ -36,10 +39,33 @@ public class SpringDataApplication {
 
 		BookRepository bookRepository = ctx.getBean(BookRepository.class);
 		bookRepository.saveAll(exampleBooks);
+		System.out.println(bookRepository.findAll());
 
-		derivedQueries(bookRepository);
+//		derivedQueries(bookRepository);
 
-		specificationQueries(bookRepository);
+//		specificationQueries(bookRepository);
+
+		System.out.println(bookRepository.findAll(
+				QBook.book.title.eq("Domain Driven Design")));
+
+		System.out.println(bookRepository.findAll(
+				QBook.book.publishDate.after(LocalDateTime.parse("2000-01-01T00:00")),
+				PageRequest.of(1,5)
+		).getContent());
+
+		System.out.println(bookRepository.findAll(
+				QBook.book.title.contains("Clean")
+		));
+
+		System.out.println(bookRepository.findAll(
+				QBook.book.author.eq("Robert C. Martin")
+				.and(QBook.book.age.gt(10)),
+				Sort.by("age").ascending()
+		));
+
+		System.out.println(bookRepository.count(
+				QBook.book.author.eq("Kent Beck")
+		));
 	}
 
 	private static void specificationQueries(BookRepository bookRepository) {

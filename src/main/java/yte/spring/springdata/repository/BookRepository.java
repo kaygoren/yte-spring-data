@@ -4,12 +4,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import yte.spring.springdata.entity.Book;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
+public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book>, QuerydslPredicateExecutor<Book> {
 
 	List<Book> findByTitle(String title);
 
