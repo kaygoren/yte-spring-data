@@ -41,10 +41,14 @@ public class SpringDataApplication {
 		bookRepository.saveAll(exampleBooks);
 		System.out.println(bookRepository.findAll());
 
-//		derivedQueries(bookRepository);
+		derivedQueries(bookRepository);
 
-//		specificationQueries(bookRepository);
+		specificationQueries(bookRepository);
 
+		queryDslQuries(bookRepository);
+	}
+
+	private static void queryDslQuries(BookRepository bookRepository) {
 		System.out.println(bookRepository.findAll(
 				QBook.book.title.eq("Domain Driven Design")));
 
